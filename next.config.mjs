@@ -5,8 +5,9 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  basePath: '/dcict-onlinepapers',
-  assetPrefix: '/dcict-onlinepapers/',
+  // Remove basePath and assetPrefix since you're using a custom domain
+  // basePath: '/dcict-onlinepapers',
+  // assetPrefix: '/dcict-onlinepapers/',
 };
 
 export default nextConfig;
