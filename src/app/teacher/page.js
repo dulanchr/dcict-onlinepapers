@@ -133,9 +133,9 @@ export default function TeacherDashboard() {
         }
     };
 
-    const handleReviewSubmission = (studentId) => {
-        router.push(`/teacher/review?studentId=${studentId}`);
-    };
+const handleReviewSubmission = (studentId) => {
+    router.push(`/teacher/review?studentId=${studentId}`);
+};
 
     const handleDeleteSubmission = (submission) => {
         setSelectedSubmission(submission);
