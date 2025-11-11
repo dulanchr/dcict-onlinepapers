@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '../../context/AuthContext'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 /**
  * Navigation Header Component
@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 function NavigationHeader() {
   const { currentUser, isAuthenticated, logout, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     const success = await logout();
@@ -18,8 +19,8 @@ function NavigationHeader() {
     }
   };
 
-  // Don't show header on loading or when no user is authenticated
-  if (loading || !isAuthenticated()) {
+  // Don't show header on loading, when no user is authenticated, or on landing page
+  if (loading || !isAuthenticated() || pathname === '/') {
     return null;
   }
 
@@ -87,6 +88,8 @@ function NavigationHeader() {
  * Handles the client-side layout logic
  */
 export default function ClientLayout({ children }) {
+  const pathname = usePathname();
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <NavigationHeader />
