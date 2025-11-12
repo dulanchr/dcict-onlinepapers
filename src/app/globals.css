@@ -48,3 +48,15 @@ body {
   font-style: normal;
   font-display: swap;
 }
+
+
+/* Global smooth scrolling and font rendering */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px; /* Account for sticky navigation height */
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
