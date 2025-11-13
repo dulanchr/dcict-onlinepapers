@@ -6,7 +6,7 @@ import ClientLayout from '../components/layout/ClientLayout'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'MCQ Exam System - DCICT Online Papers',
+  title: 'ictbydulan.com',
   description: 'Digital multiple choice examination platform for Department of Computer & Information Communication Technology',
 }
 

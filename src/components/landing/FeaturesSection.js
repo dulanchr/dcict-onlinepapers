@@ -18,7 +18,7 @@ export default function FeaturesSection() {
 
   const papers = [
     {
-      title: 'Final Paper Series',
+      title: 'MCQ Paper #1',
       location: 'Student Portal',
       paper: 'MCQ Paper #1',
       link: '/login'
@@ -47,11 +47,11 @@ export default function FeaturesSection() {
               : 'opacity-0 translate-y-4'
           }`}
           style={{
-            transitionDelay: isVisible ? `${index * 200}ms` : '0ms'
+            transitionDelay: isVisible ? '0ms' : `${index * 200}ms`
           }}
         >
           <div className="flex items-center justify-between w-full">
-            <p className="text-[16px] font-semibold text-black tracking-tight group-hover:text-white transition-colors duration-300">
+            <p className="text-[16px] font-semibold text-black tracking-normal group-hover:text-white transition-colors duration-300">
               {paper.title}
             </p>
             <div className="flex items-center justify-center">
@@ -62,7 +62,7 @@ export default function FeaturesSection() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between w-full text-[12px] text-black tracking-tight group-hover:text-white transition-colors duration-300">
+          <div className="flex items-center justify-between w-full text-[12px] text-black tracking-normal group-hover:text-white transition-colors duration-300">
             <p>{paper.location}</p>
             <p>{paper.paper}</p>
           </div>

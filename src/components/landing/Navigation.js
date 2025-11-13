@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import GlowHover from '../animations/GlowHover';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,82 +72,99 @@ export default function Navigation() {
   }, [isMenuOpen]);
 
   const navigationLinks = [
-    { label: 'Home', id: '/', isSinhala: false },
-    { label: 'පංති', id: '/classes', isSinhala: true },
-    { label: 'පරීක්ෂණ', id: '/exams', isSinhala: true },
-    { label: 'Contact', id: '/contact', isSinhala: false }
+    { 
+      label: 'Home', 
+      id: '/', 
+      isSinhala: false
+    },
+    { 
+      label: 'Classes', 
+      id: '/classes', 
+      isSinhala: false
+    },
+    { 
+      label: 'Exams', 
+      id: '/exams', 
+      isSinhala: false
+    },
+    { 
+      label: 'Contact', 
+      id: '/contact', 
+      isSinhala: false
+    }
   ];
 
   const LogoComponent = () => (
     <motion.div 
       className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0"
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.2 }}
     >
-      <div className="[grid-area:1_/_1] relative w-[44px] h-[44px] md:w-[48px] md:h-[48px] lg:w-[50.573px] lg:h-[50.573px]">
-        <Image 
-          src="/images/profile.png"
+       <Image 
+          src="/images/logo.svg"
           alt="Logo"
-          width={51}
-          height={51}
-          className="block size-full rounded-full object-cover"
+          width={150}
+          height={150}
+          className="block size-half object-cover"
           priority
         />
-      </div>
     </motion.div>
   );
 
   const DesktopNavigation = () => (
     <div className="content-stretch flex gap-[50px] items-center relative size-full">
       <div className="absolute border-[0px_0px_0.5px] border-solid inset-0 pointer-events-none border-gray-300" />
-      <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0 px-4 md:px-8 lg:px-[120px]">
+      <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
         <div className="basis-0 content-stretch flex grow h-full items-center justify-between min-h-px min-w-px relative shrink-0">
           {/* Logo and Navigation */}
-          <div className="box-border content-stretch flex gap-4 md:gap-8 lg:gap-[50px] h-[82px] items-center px-4 md:px-8 lg:px-[60px] py-0 relative shrink-0">
+          <div className="box-border content-stretch flex gap-4 md:gap-6 lg:gap-[30px] h-[66px] items-center px-[60px] py-0 relative shrink-0">
             <LogoComponent />
-            <div className="content-stretch flex font-normal gap-4 md:gap-6 lg:gap-[34.692px] items-center leading-[normal] not-italic relative shrink-0 text-[14px] md:text-[15px] lg:text-[16px] text-black text-nowrap whitespace-pre">
+            <div className="content-stretch flex font-normal gap-3 md:gap-4 lg:gap-[20px] items-center leading-[normal] not-italic relative shrink-0 text-[11.2px] md:text-[12px] lg:text-[12.8px] text-black text-nowrap whitespace-pre">
               {navigationLinks.map((link) => (
-                <motion.div
+                <Link 
                   key={link.label}
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
+                  href={link.id} 
+                  className={`relative shrink-0 transition-colors duration-300 ease-in-out ${
+                    link.isSinhala ? 'font-malithi text-[12.8px] md:text-[13.6px] lg:text-[14.4px]' : ''
+                  } ${
+                    (pathName === link.id || (link.id !== '/' && pathName.startsWith(link.id)))
+                      ? 'text-gray-800 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                  style={link.isSinhala ? { fontFamily: 'Malithi, sans-serif' } : {}}
                 >
-                  <Link 
-                    href={link.id} 
-                    className={`relative shrink-0 transition-colors duration-200 ${
-                      link.isSinhala ? 'font-malithi text-[16px] md:text-[17px] lg:text-[18px]' : 'font-inter'
-                    } ${
-                      pathName === link.id 
-                        ? 'text-orange-500 font-medium' 
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                    style={link.isSinhala ? { fontFamily: 'Malithi, sans-serif' } : {}}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
             </div>
           </div>
           
           {/* Student Portal Button */}
-          <div 
-            className="box-border content-stretch flex gap-2 md:gap-3 lg:gap-[12px] h-[82px] items-center px-4 md:px-8 lg:px-[60px] py-0 relative shrink-0 cursor-pointer border-l border-r border-b border-gray-300 transition-colors duration-300 hover:bg-orange-500 group"
-            onClick={handleLogin}
-          >
-            <p className="font-['Inter',sans-serif] font-normal leading-[normal] not-italic relative shrink-0 text-[14px] md:text-[15px] lg:text-[16px] text-nowrap whitespace-pre text-gray-900 group-hover:text-white transition-colors duration-300">
-              Student Portal
-            </p>
-            
-            <div className="flex items-center justify-center relative shrink-0">
-              <Image 
-                src="/images/arrow.svg" 
-                alt="Arrow" 
-                width={16}
-                height={16}
-                className="w-4 h-4 md:w-[18px] md:h-[18px] lg:w-[19px] lg:h-[19px] transition-colors duration-300 group-hover:brightness-0 group-hover:invert"
-              />
-            </div>
+          <div className="box-border content-stretch flex h-[66px] items-center px-[60px] py-0 relative shrink-0">
+            <GlowHover>
+              <motion.button
+                onClick={handleLogin}
+                className="px-6 py-2.5 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-all duration-200 flex items-center gap-2 relative z-10"
+                whileHover="hover"
+                initial="rest"
+              >
+                Student Portal
+                <motion.svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  variants={{
+                    rest: { x: 0 },
+                    hover: { x: 4 }
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.4, 0.0, 0.2, 1]
+                  }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </motion.svg>
+              </motion.button>
+            </GlowHover>
           </div>
         </div>
       </div>
@@ -158,12 +176,12 @@ export default function Navigation() {
       <div className="absolute border-[0px_0px_0.5px] border-solid inset-0 pointer-events-none border-gray-300" />
       <div className="basis-0 content-stretch flex grow h-full items-center justify-between min-h-px min-w-px relative shrink-0">
         {/* Logo */}
-        <div className="box-border content-stretch flex h-[65px] min-[800px]:h-[75px] sm:h-[82px] items-center px-3 min-[800px]:px-5 sm:px-6 md:px-[30px] py-0 relative shrink-0">
+        <div className="box-border content-stretch flex h-[52px] min-[800px]:h-[60px] sm:h-[66px] items-center px-3 min-[800px]:px-5 sm:px-6 md:px-[30px] py-0 relative shrink-0">
           <LogoComponent />
         </div>
         
         {/* Mobile Menu Button */}
-        <div className="box-border content-stretch flex h-[65px] min-[800px]:h-[75px] sm:h-[82px] items-center px-3 min-[800px]:px-5 sm:px-6 md:px-[30px] py-0 relative shrink-0">
+        <div className="box-border content-stretch flex h-[52px] min-[800px]:h-[60px] sm:h-[66px] items-center px-3 min-[800px]:px-5 sm:px-6 md:px-[30px] py-0 relative shrink-0">
           <button
             type="button"
             onClick={(e) => {
@@ -211,7 +229,7 @@ export default function Navigation() {
     >
       <div className="header-upper">
         <div className="w-full">
-          <div className="header-inner h-[65px] min-[800px]:h-[75px] sm:h-[82px]">
+          <div className="header-inner h-[52px] min-[800px]:h-[60px] sm:h-[66px]">
             {!isClient ? (
               <DesktopNavigation />
             ) : windowWidth >= 1280 ? (
@@ -235,7 +253,7 @@ export default function Navigation() {
           >
             {/* Header with Logo and Close Button */}
             <div className="border-b border-gray-200">
-              <div className="h-[65px] min-[800px]:h-[75px] sm:h-[82px] flex items-center justify-between px-3 min-[800px]:px-5 sm:px-6 md:px-[30px]">
+              <div className="h-[52px] min-[800px]:h-[60px] sm:h-[66px] flex items-center justify-between px-3 min-[800px]:px-5 sm:px-6 md:px-[30px]">
                 <LogoComponent />
                 
                 {/* Close Button */}
@@ -271,7 +289,7 @@ export default function Navigation() {
             </div>
 
             {/* Navigation Content - Centered */}
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-65px)] min-[800px]:min-h-[calc(100vh-75px)] sm:min-h-[calc(100vh-82px)] px-6 py-8">
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-52px)] min-[800px]:min-h-[calc(100vh-60px)] sm:min-h-[calc(100vh-66px)] px-6 py-8">
               <motion.ul 
                 className="navigation space-y-2 w-full max-w-md"
                 initial={{ opacity: 0, y: 20 }}
@@ -288,10 +306,10 @@ export default function Navigation() {
                     <Link 
                       href={link.id} 
                       className={`block text-center text-lg min-[800px]:text-xl sm:text-2xl font-medium py-4 min-[800px]:py-5 px-4 transition-colors rounded-lg ${
-                        link.isSinhala ? 'font-malithi text-[20px] min-[800px]:text-[24px] sm:text-[28px]' : 'font-inter'
+                        link.isSinhala ? 'font-malithi text-[20px] min-[800px]:text-[24px] sm:text-[28px]' : ''
                       } ${
-                        pathName === link.id 
-                          ? 'text-orange-500 bg-orange-50' 
+                        (pathName === link.id || (link.id !== '/' && pathName.startsWith(link.id)))
+                          ? 'text-gray-800 bg-gray-100' 
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                       style={link.isSinhala ? { fontFamily: 'Malithi, sans-serif' } : {}}
@@ -309,7 +327,7 @@ export default function Navigation() {
                 >
                   <button
                     onClick={handleLogin}
-                    className="w-full bg-gray-900 text-white px-6 min-[800px]:px-8 py-4 min-[800px]:py-5 text-base min-[800px]:text-lg sm:text-xl font-medium transition-all duration-200 hover:bg-gray-800 active:scale-[0.98] flex items-center justify-center gap-3 font-['Inter',sans-serif] rounded-lg shadow-lg touch-manipulation"
+                    className="w-full bg-gray-900 text-white px-6 min-[800px]:px-8 py-4 min-[800px]:py-5 text-base min-[800px]:text-lg sm:text-xl font-medium transition-all duration-200 hover:bg-gray-800 active:scale-[0.98] flex items-center justify-center gap-3 rounded-lg shadow-lg touch-manipulation"
                   >
                     Student Portal
                     <svg 

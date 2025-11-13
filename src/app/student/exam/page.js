@@ -7,6 +7,8 @@ import { getAllQuestions } from '../../../lib/questions';
 import { getStudentSubmissions, saveSubmission } from '../../../lib/storage';
 import { getExamSchedule, isExamAvailable, hasExamEnded, getTimeRemainingSeconds, getTimeRemainingFormatted } from '../../../lib/examSettings';
 import QuestionCard from '../../../components/student/QuestionCard';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 /**
  * Student Exam Page
@@ -14,7 +16,7 @@ import QuestionCard from '../../../components/student/QuestionCard';
  * @returns {JSX.Element} Exam page component
  */
 export default function StudentExam() {
-    const { currentUser, loading: authLoading } = useAuth();
+    const { currentUser, loading: authLoading, logout } = useAuth();
     const router = useRouter();
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState({});
@@ -326,6 +328,14 @@ export default function StudentExam() {
         }
     };
 
+    // Logout handler
+    const handleLogout = () => {
+        const success = logout();
+        if (success) {
+            router.push('/');
+        }
+    };
+
     // Calculate progress
     const answeredCount = Object.keys(answers).length;
     const progressPercentage = questions.length > 0 ? (answeredCount / questions.length) * 100 : 0;
@@ -334,12 +344,34 @@ export default function StudentExam() {
     // Show loading while auth is loading or exam is initializing
     if (authLoading || loading) {
         return (
-            <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                    <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin mx-auto"></div>
-                    <p className="mt-3 text-gray-600 text-sm">
-                        {authLoading ? 'Loading user...' : 'Loading exam...'}
-                    </p>
+            <div className="min-h-screen bg-white">
+                {/* Header */}
+                <header className="border-b border-gray-200 bg-white">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[52px] sm:h-[66px]">
+                        <div className="h-full flex items-center justify-between">
+                            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                <h1 className="text-sm sm:text-base font-medium text-gray-900">Student Exam</h1>
+                            </div>
+                            <Link href="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center sm:hidden">
+                                <img src="/images/logo.svg" alt="Student Portal" className="h-6 w-auto" />
+                            </Link>
+                            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+                                    <img src="/images/dulanchathuranga.png" alt="Profile" className="h-8 sm:h-10 w-auto rounded-lg" />
+                                    <img src="/images/logo.svg" alt="ICTBYDULAN.COM" className="h-6 sm:h-8 w-auto" />
+                                </div>
+                                <img src="/images/dulanchathuranga.png" alt="Profile" className="sm:hidden h-8 w-auto rounded-lg" />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                        <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin mx-auto"></div>
+                        <p className="mt-3 text-gray-600 text-sm font-light">
+                            {authLoading ? 'Loading user...' : 'Loading exam...'}
+                        </p>
+                    </div>
                 </div>
             </div>
         );
@@ -348,238 +380,379 @@ export default function StudentExam() {
     // Show error if no questions loaded
     if (questions.length === 0) {
         return (
-            <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                    <p className="text-gray-600">No exam questions available.</p>
-                    <button
-                        onClick={() => router.push('/student')}
-                        className="mt-4 bg-gray-800 text-white px-4 py-2 text-sm hover:bg-gray-700"
-                    >
-                        Back to Dashboard
-                    </button>
+            <div className="min-h-screen bg-white">
+                {/* Header */}
+                <header className="border-b border-gray-200 bg-white">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[52px] sm:h-[66px]">
+                        <div className="h-full flex items-center justify-between">
+                            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                <h1 className="text-sm sm:text-base font-medium text-gray-900">Student Exam</h1>
+                            </div>
+                            <Link href="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center sm:hidden">
+                                <img src="/images/logo.svg" alt="Student Portal" className="h-6 w-auto" />
+                            </Link>
+                            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+                                    <img src="/images/dulanchathuranga.png" alt="Profile" className="h-8 sm:h-10 w-auto rounded-lg" />
+                                    <img src="/images/logo.svg" alt="ICTBYDULAN.COM" className="h-6 sm:h-8 w-auto" />
+                                </div>
+                                <img src="/images/dulanchathuranga.png" alt="Profile" className="sm:hidden h-8 w-auto rounded-lg" />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                        <p className="text-gray-600 font-light">No exam questions available.</p>
+                        <motion.button
+                            onClick={() => router.push('/student')}
+                            whileHover="hover"
+                            initial="rest"
+                            className="mt-4 px-4 py-2.5 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-all duration-200 inline-flex items-center gap-2"
+                        >
+                            <span>Back to Dashboard</span>
+                            <motion.svg 
+                                className="w-4 h-4" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                                variants={{
+                                    rest: { x: 0 },
+                                    hover: { x: 4 }
+                                }}
+                                transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </motion.svg>
+                        </motion.button>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 pb-20">
-            {/* Timer Warning */}
-            {timeRemaining <= 300 && timeRemaining > 0 && (
-                <div className="border border-red-200 bg-red-50 p-4">
-                    <div className="flex items-center justify-center">
-                        <span className="text-red-700 text-sm font-normal">
-                            ⚠ Warning: Less than 5 minutes remaining!
-                        </span>
+        <div className="min-h-screen bg-white">
+            {/* Header */}
+            <header className="border-b border-gray-200 bg-white">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[52px] sm:h-[66px]">
+                    <div className="h-full flex items-center justify-between">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                            <h1 className="text-sm sm:text-base font-medium text-gray-900">Student Exam</h1>
+                        </div>
+                        <Link href="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center sm:hidden">
+                            <img src="/images/logo.svg" alt="Student Portal" className="h-6 w-auto" />
+                        </Link>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                            <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+                                <img src="/images/dulanchathuranga.png" alt="Profile" className="h-8 sm:h-10 w-auto rounded-lg" />
+                                <img src="/images/logo.svg" alt="ICTBYDULAN.COM" className="h-6 sm:h-8 w-auto" />
+                            </div>
+                            <img src="/images/dulanchathuranga.png" alt="Profile" className="sm:hidden h-8 w-auto rounded-lg" />
+                            <motion.button
+                                onClick={handleLogout}
+                                whileHover="hover"
+                                initial="rest"
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 min-h-[36px] sm:min-h-[40px]"
+                            >
+                                <span className="whitespace-nowrap">Sign Out</span>
+                                <motion.svg 
+                                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    viewBox="0 0 24 24"
+                                    variants={{ rest: { x: 0 }, hover: { x: 4 } }}
+                                    transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </motion.svg>
+                            </motion.button>
+                        </div>
                     </div>
                 </div>
-            )}
+            </header>
 
-            {/* Exam Header with Timer */}
-            <div className="border border-gray-200 bg-white p-6">
-                <div className="flex items-center justify-between mb-4">
-                    <div>
-                        <h1 className="text-lg font-normal text-gray-900">Programming Fundamentals Exam</h1>
-                        <p className="text-gray-600 text-sm">Answer all questions to complete the exam</p>
-                        
-                        {/* Timer Display */}
-                        <div className="mt-2">
-                            <span className={`text-sm font-normal ${timeRemaining <= 300 ? 'text-red-600' : 'text-gray-700'}`}>
-                                Time Remaining: {getTimeRemainingFormatted()}
-                            </span>
-                        </div>
-                        
-                        {/* Violation Counter */}
-                        {cheatLog.length > 0 && (
-                            <div className="mt-1">
-                                <span className="text-red-600 text-xs font-normal">
-                                    ⚠ Violations: {cheatLog.length}
+            <main className="py-6">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 pb-20">
+                    {/* Timer Warning */}
+                    {timeRemaining <= 300 && timeRemaining > 0 && (
+                        <div className="border border-red-300 bg-red-50 rounded-lg p-4">
+                            <div className="flex items-center justify-center">
+                                <span className="text-red-700 text-sm font-light">
+                                    ⚠ Warning: Less than 5 minutes remaining!
                                 </span>
                             </div>
-                        )}
-                    </div>
-                    <div className="text-right">
-                        <div className="text-xs text-gray-500">Student:</div>
-                        <div className="font-normal text-gray-900 text-sm">{currentUser?.name}</div>
-                        <div className="text-xs text-gray-500">ID: {currentUser?.id}</div>
-                    </div>
-                </div>
+                        </div>
+                    )}
 
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-normal text-gray-900">
-                            {answeredCount} of {questions.length} answered
-                        </span>
-                    </div>
-                    <div className="w-full bg-gray-200 h-2">
-                        <div 
-                            className="bg-gray-700 h-2 transition-all duration-300"
-                            style={{ width: `${progressPercentage}%` }}
-                        ></div>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                        {allAnswered ? 'All questions answered' : 'Please answer all questions to submit'}
-                    </div>
-                </div>
-            </div>
-
-            {/* Instructions */}
-            <div className="border border-gray-200 bg-gray-50 p-4">
-                <h3 className="text-gray-900 font-normal mb-2">Exam Instructions</h3>
-                <ul className="text-gray-700 text-sm space-y-1">
-                    <li>• Select one answer for each question</li>
-                    <li>• You can change your answers before submitting</li>
-                    <li>• Make sure to answer all questions before submitting</li>
-                    <li>• Once submitted, you cannot retake the exam</li>
-                    <li>• <span className="text-red-600">Stay on this page - leaving will be tracked</span></li>
-                    <li>• <span className="text-red-600">The exam will auto-submit when time expires</span></li>
-                </ul>
-            </div>
-
-            {/* Questions */}
-            <div className="space-y-6">
-                {questions.map((question, index) => (
-                    <QuestionCard
-                        key={question.id}
-                        question={question}
-                        questionNumber={index + 1}
-                        selectedAnswer={answers[question.id] || null}
-                        onAnswerChange={handleAnswerChange}
-                    />
-                ))}
-            </div>
-
-            {/* Sticky Submit Section */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-                <div className="max-w-4xl mx-auto p-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                            <div className="text-sm text-gray-600">
-                                Progress: <span className="font-normal text-gray-900">{answeredCount}/{questions.length}</span>
+                    {/* Exam Header with Timer */}
+                    <div className="border border-gray-300 bg-white rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h1 className="text-base font-medium text-gray-900">Programming Fundamentals Exam</h1>
+                                <p className="text-gray-600 text-sm font-light">Answer all questions to complete the exam</p>
+                                
+                                <div className="mt-2">
+                                    <span className={`text-sm font-light ${timeRemaining <= 300 ? 'text-red-600' : 'text-gray-700'}`}>
+                                        Time Remaining: {getTimeRemainingFormatted()}
+                                    </span>
+                                </div>
+                                
+                                {cheatLog.length > 0 && (
+                                    <div className="mt-1">
+                                        <span className="text-red-600 text-xs font-light">
+                                            ⚠ Violations: {cheatLog.length}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
-                            <div className="w-24 bg-gray-200 h-1.5">
+                            <div className="text-right">
+                                <div className="text-xs text-gray-500 font-light">Student:</div>
+                                <div className="font-medium text-gray-900 text-sm">{currentUser?.name}</div>
+                                <div className="text-xs text-gray-500 font-light">ID: {currentUser?.id}</div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-600 font-light">Progress</span>
+                                <span className="font-medium text-gray-900">
+                                    {answeredCount} of {questions.length} answered
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-200 h-2 rounded-full">
                                 <div 
-                                    className="bg-gray-700 h-1.5 transition-all duration-300"
+                                    className="bg-gray-700 h-2 rounded-full transition-all duration-300"
                                     style={{ width: `${progressPercentage}%` }}
                                 ></div>
                             </div>
-                            {cheatLog.length > 0 && (
-                                <div className="text-xs text-red-600">
-                                    Violations: {cheatLog.length}
-                                </div>
-                            )}
-                            <div className={`text-xs ${timeRemaining <= 300 ? 'text-red-600' : 'text-gray-600'}`}>
-                                Time: {getTimeRemainingFormatted()}
+                            <div className="text-xs text-gray-500 font-light">
+                                {allAnswered ? 'All questions answered' : 'Please answer all questions to submit'}
                             </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-3">
-                            <button
-                                onClick={() => router.push('/student')}
-                                className="border border-gray-300 text-gray-700 px-4 py-2 text-sm font-normal hover:bg-gray-50 transition-colors"
-                            >
-                                Back to Dashboard
-                            </button>
-                            <button
-                                onClick={() => setShowConfirmDialog(true)}
-                                disabled={!allAnswered || isSubmitting}
-                                className="bg-gray-800 text-white px-6 py-2 text-sm font-normal hover:bg-gray-700 focus:outline-none focus:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {isSubmitting ? 'Submitting...' : 'Submit Exam'}
-                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Confirmation Dialog */}
-            {showConfirmDialog && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-                    <div className="bg-white border border-gray-200 max-w-md w-full p-6">
-                        <div className="text-center mb-6">
-                            <h3 className="text-base font-normal text-gray-900 mb-2">Submit Exam?</h3>
-                            <p className="text-gray-600 text-sm">
-                                Are you sure you want to submit your exam? You won't be able to change your answers after submission.
-                            </p>
-                        </div>
+                    {/* Instructions */}
+                    <div className="border border-gray-300 bg-gray-50 rounded-lg p-4">
+                        <h3 className="text-gray-900 font-medium mb-2">Exam Instructions</h3>
+                        <ul className="text-gray-700 text-sm font-light space-y-1">
+                            <li>• Select one answer for each question</li>
+                            <li>• You can change your answers before submitting</li>
+                            <li>• Make sure to answer all questions before submitting</li>
+                            <li>• Once submitted, you cannot retake the exam</li>
+                            <li>• <span className="text-red-600">Stay on this page - leaving will be tracked</span></li>
+                            <li>• <span className="text-red-600">The exam will auto-submit when time expires</span></li>
+                        </ul>
+                    </div>
 
-                        <div className="bg-gray-50 p-4 mb-6">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Questions Answered:</span>
-                                <span className="font-normal">{answeredCount}/{questions.length}</span>
-                            </div>
-                            <div className="flex justify-between text-sm mt-1">
-                                <span className="text-gray-600">Completion:</span>
-                                <span className="font-normal text-gray-900">{Math.round(progressPercentage)}%</span>
-                            </div>
-                            <div className="flex justify-between text-sm mt-1">
-                                <span className="text-gray-600">Time Remaining:</span>
-                                <span className="font-normal text-gray-900">{getTimeRemainingFormatted()}</span>
-                            </div>
-                            {cheatLog.length > 0 && (
-                                <div className="flex justify-between text-sm mt-1">
-                                    <span className="text-red-600">Violations:</span>
-                                    <span className="font-normal text-red-600">{cheatLog.length}</span>
+                    {/* Questions */}
+                    <div className="space-y-6">
+                        {questions.map((question, index) => (
+                            <QuestionCard
+                                key={question.id}
+                                question={question}
+                                questionNumber={index + 1}
+                                selectedAnswer={answers[question.id] || null}
+                                onAnswerChange={handleAnswerChange}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Sticky Submit Section */}
+                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+                        <div className="max-w-4xl mx-auto p-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-4">
+                                    <div className="text-sm text-gray-600 font-light">
+                                        Progress: <span className="font-medium text-gray-900">{answeredCount}/{questions.length}</span>
+                                    </div>
+                                    <div className="w-24 bg-gray-200 h-1.5 rounded-full">
+                                        <div 
+                                            className="bg-gray-700 h-1.5 rounded-full transition-all duration-300"
+                                            style={{ width: `${progressPercentage}%` }}
+                                        ></div>
+                                    </div>
+                                    {cheatLog.length > 0 && (
+                                        <div className="text-xs text-red-600 font-light">
+                                            Violations: {cheatLog.length}
+                                        </div>
+                                    )}
+                                    <div className={`text-xs font-light ${timeRemaining <= 300 ? 'text-red-600' : 'text-gray-600'}`}>
+                                        Time: {getTimeRemainingFormatted()}
+                                    </div>
                                 </div>
-                            )}
+                                
+                                <div className="flex items-center space-x-3">
+                                    <motion.button
+                                        onClick={() => router.push('/student')}
+                                        whileHover="hover"
+                                        initial="rest"
+                                        className="px-4 py-2 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-all duration-200 flex items-center gap-2"
+                                    >
+                                        <span>Back to Dashboard</span>
+                                        <motion.svg 
+                                            className="w-4 h-4" 
+                                            fill="none" 
+                                            stroke="currentColor" 
+                                            viewBox="0 0 24 24"
+                                            variants={{ rest: { x: 0 }, hover: { x: 4 } }}
+                                            transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </motion.svg>
+                                    </motion.button>
+                                    <motion.button
+                                        onClick={() => setShowConfirmDialog(true)}
+                                        disabled={!allAnswered || isSubmitting}
+                                        whileHover={!allAnswered || isSubmitting ? {} : "hover"}
+                                        initial="rest"
+                                        className="px-6 py-2 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></div>
+                                                <span>Submitting...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Submit Exam</span>
+                                                <motion.svg 
+                                                    className="w-4 h-4" 
+                                                    fill="none" 
+                                                    stroke="currentColor" 
+                                                    viewBox="0 0 24 24"
+                                                    variants={{ rest: { x: 0 }, hover: { x: 4 } }}
+                                                    transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </motion.svg>
+                                            </>
+                                        )}
+                                    </motion.button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div className="flex space-x-3">
-                            <button
+                    {/* Confirmation Dialog */}
+                    <AnimatePresence>
+                        {showConfirmDialog && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
                                 onClick={() => setShowConfirmDialog(false)}
-                                className="flex-1 border border-gray-300 text-gray-700 py-2 text-sm font-normal hover:bg-gray-50 transition-colors"
-                                disabled={isSubmitting}
                             >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                disabled={isSubmitting}
-                                className="flex-1 bg-gray-800 text-white py-2 text-sm font-normal hover:bg-gray-700 transition-colors disabled:opacity-50"
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                    transition={{ duration: 0.2, ease: [0.4, 0.0, 0.2, 1] }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="bg-white border border-gray-300 rounded-lg max-w-md w-full p-6"
+                                >
+                                    <div className="text-center mb-6">
+                                        <h3 className="text-base font-medium text-gray-900 mb-2">Submit Exam?</h3>
+                                        <p className="text-gray-600 text-sm font-light">
+                                            Are you sure you want to submit your exam? You won't be able to change your answers after submission.
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600 font-light">Questions Answered:</span>
+                                            <span className="font-medium">{answeredCount}/{questions.length}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600 font-light">Completion:</span>
+                                            <span className="font-medium text-gray-900">{Math.round(progressPercentage)}%</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600 font-light">Time Remaining:</span>
+                                            <span className="font-medium text-gray-900">{getTimeRemainingFormatted()}</span>
+                                        </div>
+                                        {cheatLog.length > 0 && (
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-red-600 font-light">Violations:</span>
+                                                <span className="font-medium text-red-600">{cheatLog.length}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex gap-3">
+                                        <motion.button
+                                            onClick={() => setShowConfirmDialog(false)}
+                                            disabled={isSubmitting}
+                                            whileHover={{ scale: 1.01 }}
+                                            whileTap={{ scale: 0.99 }}
+                                            className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 transition-all duration-200 disabled:opacity-50"
+                                        >
+                                            Cancel
+                                        </motion.button>
+                                        <motion.button
+                                            onClick={handleSubmit}
+                                            disabled={isSubmitting}
+                                            whileHover={!isSubmitting ? { scale: 1.01 } : {}}
+                                            whileTap={!isSubmitting ? { scale: 0.99 } : {}}
+                                            className="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium text-white transition-all duration-200 disabled:opacity-50"
+                                        >
+                                            {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
+                                        </motion.button>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Cheat Warning Modal */}
+                    <AnimatePresence>
+                        {showCheatWarning && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
                             >
-                                {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
-                            </button>
-                        </div>
-                    </div>
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                    transition={{ duration: 0.2, ease: [0.4, 0.0, 0.2, 1] }}
+                                    className="bg-white border border-gray-300 rounded-lg max-w-md w-full p-6"
+                                >
+                                    <div className="text-center mb-6">
+                                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                        </div>
+                                        <h3 className="text-base font-medium text-gray-900 mb-2">Warning: Suspicious Activity Detected</h3>
+                                        <p className="text-gray-600 text-sm font-light">
+                                            Your actions are being monitored. Leaving this page, switching tabs, or using developer tools during the exam is not allowed and will be reported.
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                                        <p className="text-red-800 text-sm font-light">
+                                            All violations are logged and will be reviewed by your instructor. Continued violations may result in exam disqualification.
+                                        </p>
+                                    </div>
+
+                                    <motion.button
+                                        onClick={() => setShowCheatWarning(false)}
+                                        whileHover={{ scale: 1.01 }}
+                                        whileTap={{ scale: 0.99 }}
+                                        className="w-full px-4 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium text-white transition-all duration-200"
+                                    >
+                                        I Understand
+                                    </motion.button>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
-            )}
-
-            {/* Cheat Warning Modal */}
-            {showCheatWarning && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white border border-gray-200 max-w-md w-full p-6">
-                        <div className="text-center mb-6">
-                            <h3 className="text-base font- text-red-600 mb-2">⚠ Warning: Suspicious Activity Detected</h3>
-                            <p className="text-gray-600 text-sm">
-                                කරුණාකර මෙම පිටුවේ රැඳී සිට ඔබේ විභාගය කෙරෙහි අවධානය යොමු කරන්න. සියලුම ක්‍රියාකාරකම් ලොග් වෙමින් පවතී.
-                            </p>
-                        </div>
-
-                        <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-                            <div className="text-sm text-red-700">
-                                <p className="font-medium">Activities that are monitored:</p>
-                                <ul className="mt-1 list-disc list-inside space-y-1">
-                                    <li>Switching tabs or windows</li>
-                                    <li>Right-clicking or using developer tools</li>
-                                    <li>Leaving the exam page</li>
-                                    <li>Minimizing the browser window</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="text-center">
-                            <button
-                                onClick={() => setShowCheatWarning(false)}
-                                className="bg-red-600 text-white px-6 py-2 text-sm font-normal hover:bg-red-700 transition-colors"
-                            >
-                                I Understand - Continue Exam
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            </main>
         </div>
     );
 }

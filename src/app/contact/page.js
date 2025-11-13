@@ -4,18 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '../../components/landing/Navigation';
 import Footer from '../../components/common/Footer';
+import ContactCard from '../../components/contact/ContactCard';
+import ContactForm from '../../components/contact/ContactForm';
 
 export default function ContactPage() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -26,218 +20,54 @@ export default function ContactPage() {
     };
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setSubmitStatus('success');
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      
-      // Reset status after 5 seconds
-      setTimeout(() => setSubmitStatus(null), 5000);
-    }, 1000);
-  };
-
-  const contactMethods = [
-    {
-      id: 1,
-      title: 'Email',
-      info: 'support@ictbydulan.com',
-      description: 'Send us an email and we\'ll respond within 24 hours',
-      icon: '📧',
-    },
-    {
-      id: 2,
-      title: 'Phone',
-      info: '+94 77 123 4567',
-      description: 'Call us during office hours for immediate assistance',
-      icon: '📞',
-    },
-    {
-      id: 3,
-      title: 'Address',
-      info: 'Colombo, Sri Lanka',
-      description: 'Visit us at our office during business hours',
-      icon: '📍',
-    },
-    {
-      id: 4,
-      title: 'Office Hours',
-      info: 'Mon - Fri: 9AM - 5PM',
-      description: 'We\'re available to help you during these times',
-      icon: '🕐',
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navigation />
 
       {/* Hero Section */}
-      <main className="flex-grow">
-        <section className="pt-24 pb-12 lg:pt-32 lg:pb-16">
-          <div className="max-w-6xl mx-auto px-4">
+      <main className="flex items-center justify-center flex-grow">
+        <div className="max-w-6xl mx-auto px-4 py-8 lg:py-12 xl:py-16 w-full">
+          <div className="text-center max-w-4xl mx-auto">
             {/* Animated Hero Content */}
             <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="text-center max-w-4xl mx-auto">
+              <div className="flex items-center justify-center gap-3 lg:gap-4 mb-3 lg:mb-4">
                 <img 
-                  src="/images/logo-full.svg" 
-                  alt="ICTBYDULAN.COM" 
-                  className="h-7 lg:h-10 w-auto mx-auto mb-3 lg:mb-4"
+                  src="/images/dulanchathuranga.png" 
+                  alt="Profile" 
+                  style={{ height: '100px', width: 'auto' }}
+                  className="lg:h-9 rounded-xl"
                 />
-                <h1 className="text-3xl lg:text-5xl font-light tracking-tight text-black mb-4">
-                  Contact Us
-                </h1>
-                <p className="text-lg lg:text-xl text-gray-600 font-light">
-                  Get in touch with us for any questions or support
-                </p>
+                <img 
+                  src="/images/logo.svg" 
+                  alt="ICTBYDULAN.COM" 
+                  className="h-8 md:h-12 lg:h-20 w-auto"
+                />
+              </div>
+              <div className="flex gap-2 items-start justify-center text-black mb-8">
+                <p className="text-base md:text-lg lg:text-[22px] uppercase font-light tracking-normal">Contact Us</p>
+                <p className="text-base md:text-lg lg:text-[22px] uppercase tracking-normal" style={{ fontFamily: 'Rashmi, sans-serif' }}>අප හා සම්බන්ධ වන්න</p>
               </div>
             </div>
           </div>
-        </section>
 
-        {/* Contact Methods Grid Section */}
-        <section className="py-12 lg:py-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              {contactMethods.map((method, index) => (
-                <div
-                  key={method.id}
-                  className={`transition-all duration-1000 delay-${index * 150} ${
-                    isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                >
-                  <div className="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow duration-300">
-                    <div className="text-4xl mb-4">{method.icon}</div>
-                    <h3 className="text-2xl font-light text-black mb-2">
-                      {method.title}
-                    </h3>
-                    <p className="text-sm text-blue-600 mb-3 font-medium">
-                      {method.info}
-                    </p>
-                    <p className="text-gray-600 leading-relaxed">
-                      {method.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          {/* Cards and Form Container */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+            {/* Contact Cards - Left Side */}
+            <div>
+              <ContactCard />
             </div>
-          </div>
-        </section>
 
-        {/* Contact Form Section */}
-        <section className="py-12 lg:py-16 bg-gray-50">
-          <div className="max-w-2xl mx-auto px-4">
-            <div className={`transition-all duration-1000 delay-600 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}>
-              <div className="text-center mb-8">
-                <h2 className="text-2xl lg:text-3xl font-light text-black mb-4">
-                  Send Us a Message
-                </h2>
-                <p className="text-gray-600">
-                  Fill out the form below and we'll get back to you soon
-                </p>
+            {/* Contact Form - Right Side */}
+            <div className="lg:sticky lg:top-8 lg:self-start">
+              <div className="bg-white border border-gray-300 rounded-sm p-6">
+                <h3 className="text-xl font-semibold text-black mb-6">Send Us a Message</h3>
+                <ContactForm />
               </div>
-
-              {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
-                  <p className="font-medium">Message sent successfully!</p>
-                  <p className="text-sm">We'll get back to you as soon as possible.</p>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 lg:p-8 rounded-2xl border border-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                      placeholder="Your name"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject *
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    required
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    placeholder="What is this regarding?"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="5"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
-                    placeholder="Tell us more..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
             </div>
           </div>
-        </section>
+        </div>
       </main>
-
+    
       <Footer />
     </div>
   );

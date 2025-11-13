@@ -40,15 +40,22 @@ export default function Home() {
           <div className="text-center max-w-4xl mx-auto">
             {/* Animated Hero Content */}
             <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            
-              <img 
-                src="/images/logo-full.svg" 
-                alt="ICTBYDULAN.COM" 
-                className="h-7 lg:h-10 w-auto mx-auto mb-3 lg:mb-4"
-              />
+              <div className="flex items-center justify-center gap-3 lg:gap-4 mb-3 lg:mb-4">
+                <img 
+                  src="/images/dulanchathuranga.png" 
+                  alt="Profile" 
+                  style={{ height: '100px', width: 'auto' }}
+                  className="lg:h-9 rounded-xl"
+                />
+                <img 
+                  src="/images/logo.svg" 
+                  alt="ICTBYDULAN.COM" 
+                  className="h-8 md:h-12 lg:h-20 w-auto"
+                />
+              </div>
               <div className="flex gap-2 items-start justify-center text-black">
-                <p className="text-[22px] uppercase font-light tracking-tight">Technology</p>
-                <p className="text-[22px] uppercase font-['Rashmi'] tracking-tight">හරියට ඉගෙන ගන්න..</p>
+                <p className="text-base md:text-lg lg:text-[22px] uppercase font-light tracking-normal">Technology</p>
+                <p className="text-base md:text-lg lg:text-[22px] uppercase tracking-normal" style={{ fontFamily: 'Rashmi, sans-serif' }}>හරියට ඉගෙන ගන්න..</p>
               </div>
             </div>
           </div>

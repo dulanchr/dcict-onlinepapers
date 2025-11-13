@@ -8,10 +8,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        cabinet: ['Inter', 'sans-serif'],
         rashmi: ['Rashmi', 'sans-serif'],
         malithi: ['Malithi', 'sans-serif'],
         ganganee: ['Ganganee', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
       },
     },
   },
