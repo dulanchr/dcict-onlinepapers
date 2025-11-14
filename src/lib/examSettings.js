@@ -26,7 +26,9 @@ export const setExamSchedule = (start, end) => {
         examSettings.isActive = true;
         
         // Save to localStorage
-        localStorage.setItem(EXAM_SETTINGS_KEY, JSON.stringify(examSettings));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(EXAM_SETTINGS_KEY, JSON.stringify(examSettings));
+        }
         return true;
     } catch (error) {
         console.error('Error saving exam schedule:', error);
@@ -40,13 +42,15 @@ export const setExamSchedule = (start, end) => {
  */
 export const getExamSchedule = () => {
     try {
-        const stored = localStorage.getItem(EXAM_SETTINGS_KEY);
-        if (stored) {
-            const parsedSettings = JSON.parse(stored);
-            // Update the mutable object
-            examSettings.startTime = parsedSettings.startTime;
-            examSettings.endTime = parsedSettings.endTime;
-            examSettings.isActive = parsedSettings.isActive;
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem(EXAM_SETTINGS_KEY);
+            if (stored) {
+                const parsedSettings = JSON.parse(stored);
+                // Update the mutable object
+                examSettings.startTime = parsedSettings.startTime;
+                examSettings.endTime = parsedSettings.endTime;
+                examSettings.isActive = parsedSettings.isActive;
+            }
         }
         return examSettings;
     } catch (error) {
@@ -149,13 +153,12 @@ export const clearExamSchedule = () => {
         examSettings.endTime = null;
         
         // Clear from localStorage
-        localStorage.removeItem(EXAM_SETTINGS_KEY);
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem(EXAM_SETTINGS_KEY);
+        }
         return true;
     } catch (error) {
         console.error('Error clearing exam schedule:', error);
         return false;
     }
 };
-
-// Initialize settings from localStorage on module load
-getExamSchedule();
