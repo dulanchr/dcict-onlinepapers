@@ -3,15 +3,16 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
-import LoginForm from '../../components/auth/LoginForm';
+import LoginForm from '../../components/forms/LoginForm';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import GlowHoverSimple from '../../components/animations/GlowHoverSimple';
+import GlowHoverSimple from '../../components/common/animations/GlowHoverSimple';
 
 export default function LoginPage() {
   const { currentUser, loading } = useAuth();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   // Trigger animations after component mounts
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function LoginPage() {
     }, 100);
 
     if (!loading && currentUser) {
+      setIsRedirecting(true);
       if (currentUser.role === 'teacher') {
         router.push('/teacher');
       } else if (currentUser.role === 'student') {
@@ -31,12 +33,12 @@ export default function LoginPage() {
     return () => clearTimeout(timer);
   }, [currentUser, loading, router]);
 
-  if (loading) {
+  if (loading || isRedirecting) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-center">
           <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-3 text-gray-600 text-sm">Loading...</p>
+          <p className="mt-3 text-gray-600 text-sm">{isRedirecting ? 'Redirecting...' : 'Loading...'}</p>
         </div>
       </div>
     );
@@ -80,6 +82,7 @@ export default function LoginPage() {
                 src="/images/logo.svg" 
                 alt="Student Portal" 
                 className="h-6 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ height: '24px', width: 'auto' }}
               />
             </Link>
 
@@ -89,11 +92,13 @@ export default function LoginPage() {
                 src="/images/dulanchathuranga.png" 
                 alt="Profile" 
                 className="h-8 sm:h-10 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ height: '40px', width: 'auto' }}
               />
               <img 
                 src="/images/logo.svg" 
                 alt="ICTBYDULAN.COM" 
                 className="hidden sm:block h-6 sm:h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ height: '32px', width: 'auto' }}
               />
             </Link>
           </div>

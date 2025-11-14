@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Navigation from '../../components/landing/Navigation';
+import Navigation from '../../components/common/Navigation';
 import Footer from '../../components/common/Footer';
-import ContactCard from '../../components/contact/ContactCard';
-import ContactForm from '../../components/contact/ContactForm';
+import ContactCard from '../../components/cards/ContactCard';
+import ContactForm from '../../components/forms/ContactForm';
 
 export default function ContactPage() {
   const router = useRouter();

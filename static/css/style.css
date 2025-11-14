@@ -1,9 +1,0 @@
-body {
-    zoom: 0.8;
-    /* Alternative approach if zoom doesn't work:
-    transform: scale(0.8);
-    transform-origin: top left;
-    width: 125%; 
-    height: 125%;
-    */
-}

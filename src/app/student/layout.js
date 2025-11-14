@@ -51,7 +51,7 @@ export default function StudentLayout({ children }) {
             {/* Header */}
             <header className="border-b border-gray-200 bg-white">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                   
+                    {/* Add any image tags here with style={{ height: 'XXpx', width: 'auto' }} */}
                 </div>
             </header>
 

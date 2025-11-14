@@ -6,7 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { getAllQuestions } from '../../../lib/questions';
 import { getStudentSubmissions, saveSubmission } from '../../../lib/storage';
 import { getExamSchedule, isExamAvailable, hasExamEnded, getTimeRemainingSeconds, getTimeRemainingFormatted } from '../../../lib/examSettings';
-import QuestionCard from '../../../components/student/QuestionCard';
+import QuestionCard from '../../../components/cards/QuestionCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 

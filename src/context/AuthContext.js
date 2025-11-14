@@ -1,8 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getCurrentUser, setCurrentUser, clearCurrentUser } from '../lib/storage';
-import { validateUser } from '../lib/users';
 
 /**
  * Authentication Context
@@ -46,21 +44,21 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     /**
-     * Load current user from localStorage on component mount
+     * Load current user from server session
      */
     useEffect(() => {
         const initializeAuth = async () => {
             try {
                 setLoading(true);
-                // Add a small delay to show loading state
-                await new Promise(resolve => setTimeout(resolve, 500));
                 
-                const user = getCurrentUser();
-                if (user) {
+                // Check server session
+                const response = await fetch('/api/auth/session');
+                if (response.ok) {
+                    const { user } = await response.json();
                     setCurrentUserState(user);
                 }
             } catch (error) {
-                console.error('Error loading current user:', error);
+                console.error('Error loading session:', error);
                 setError('Failed to load user session. Please try refreshing the page.');
             } finally {
                 setLoading(false);
@@ -78,66 +76,61 @@ export const AuthProvider = ({ children }) => {
     };
 
     /**
-     * Login function - validates against predefined users only
-     * @param {string} email - User email
-     * @param {string} password - User password
-     * @returns {Promise<boolean>} Success status
+     * Login function - calls API route (no localStorage)
      */
     const login = async (email, password) => {
         try {
             setError(null);
             setLoading(true);
 
-            // Validate inputs
             if (!email || !password) {
                 throw new Error('Email and password are required');
             }
 
-            // Add a small delay to show loading state
             await new Promise(resolve => setTimeout(resolve, 800));
 
-            // Validate against predefined users
-            const user = validateUser(email, password);
-            
-            if (!user) {
-                throw new Error('Invalid email or password');
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Invalid email or password');
             }
 
-            // Set current user in localStorage and state
-            const success = setCurrentUser(user);
-            if (success) {
-                setCurrentUserState(user);
-                return true;
-            } else {
-                throw new Error('Failed to save user session. Please try again.');
-            }
+            const { user } = await response.json();
+            setCurrentUserState(user);
+            return user;
         } catch (error) {
             console.error('Login error:', error);
             setError(error.message || 'Login failed. Please try again.');
-            return false;
+            return null;
         } finally {
             setLoading(false);
         }
     };
 
     /**
-     * Logout function - clears user session with confirmation
-     * @returns {Promise<boolean>} Success status
+     * Logout function - calls API route (no localStorage)
      */
     const logout = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            // Add a small delay for better UX
             await new Promise(resolve => setTimeout(resolve, 300));
 
-            const success = clearCurrentUser();
-            if (success) {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
                 setCurrentUserState(null);
                 return true;
             } else {
-                throw new Error('Failed to clear user session');
+                throw new Error('Failed to logout');
             }
         } catch (error) {
             console.error('Logout error:', error);

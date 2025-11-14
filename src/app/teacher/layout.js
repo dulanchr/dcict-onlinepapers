@@ -58,6 +58,7 @@ export default function TeacherLayout({ children }) {
                                 src="/images/logo.svg" 
                                 alt="Student Portal" 
                                 className="h-6 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                                style={{ height: '24px', width: 'auto' }}
                             />
                         </Link>
 
@@ -69,11 +70,13 @@ export default function TeacherLayout({ children }) {
                                     src="/images/dulanchathuranga.png" 
                                     alt="Profile" 
                                     className="h-8 sm:h-10 w-auto rounded-lg"
+                                    style={{ height: '40px', width: 'auto' }}
                                 />
                                 <img 
                                     src="/images/logo.svg" 
                                     alt="ICTBYDULAN.COM" 
                                     className="h-6 sm:h-8 w-auto"
+                                    style={{ height: '32px', width: 'auto' }}
                                 />
                             </div>
 
@@ -82,6 +85,7 @@ export default function TeacherLayout({ children }) {
                                 src="/images/dulanchathuranga.png" 
                                 alt="Profile" 
                                 className="sm:hidden h-8 w-auto rounded-lg"
+                                style={{ height: '32px', width: 'auto' }}
                             />
 
                             {/* Logout Button */}

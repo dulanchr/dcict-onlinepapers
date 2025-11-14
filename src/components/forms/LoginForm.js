@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  */
 export default function LoginForm() {
     const { login } = useAuth();
+    const router = useRouter();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -91,17 +93,41 @@ export default function LoginForm() {
         setErrors({});
 
         try {
-            const success = await login(
+            const user = await login(
                 formData.email.trim(),
                 formData.password
             );
 
-            if (!success) {
-                setErrors({ submit: 'Invalid email or password' });
+            if (user) {
+                // Navigate immediately based on role
+                if (user.role === 'teacher') {
+                    router.push('/teacher');
+                } else if (user.role === 'student') {
+                    router.push('/student');
+                }
+            } else {
+                // Show a single inline error for invalid credentials
+                setErrors({
+                    invalidCredentials: 'Invalid email or password'
+                });
+                setIsSubmitting(false);
             }
         } catch (error) {
-            setErrors({ submit: error.message || 'An unexpected error occurred' });
-        } finally {
+            let errorMsg = error.message || 'An unexpected error occurred';
+            if (
+                errorMsg.toLowerCase().includes('email') &&
+                errorMsg.toLowerCase().includes('password')
+            ) {
+                setErrors({
+                    invalidCredentials: errorMsg
+                });
+            } else if (errorMsg.toLowerCase().includes('email')) {
+                setErrors({ email: errorMsg });
+            } else if (errorMsg.toLowerCase().includes('password')) {
+                setErrors({ password: errorMsg });
+            } else {
+                setErrors({ submit: errorMsg });
+            }
             setIsSubmitting(false);
         }
     };
@@ -134,7 +160,7 @@ export default function LoginForm() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 border rounded-lg text-xs sm:text-sm font-light focus:outline-none transition-all duration-200 ${
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 border rounded-lg text-xs sm:text-sm font-light text-gray-800 focus:outline-none transition-all duration-200 ${
                             errors.email
                                 ? 'border-red-300 focus:border-red-500'
                                 : 'border-gray-300 focus:border-gray-800'
@@ -170,7 +196,7 @@ export default function LoginForm() {
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
-                            className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 ${formData.password ? 'pr-9' : 'pr-3 sm:pr-4'} border rounded-lg text-xs sm:text-sm font-light focus:outline-none transition-all duration-200 ${
+                            className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 ${formData.password ? 'pr-9' : 'pr-3 sm:pr-4'} border rounded-lg text-xs sm:text-sm  text-gray-800  font-light focus:outline-none transition-all duration-200 ${
                                 errors.password
                                     ? 'border-red-300 focus:border-red-500'
                                     : 'border-gray-300 focus:border-gray-800'
@@ -213,6 +239,14 @@ export default function LoginForm() {
                             role="alert"
                         >
                             {errors.password}
+                        </p>
+                    )}
+                    {errors.invalidCredentials && (
+                        <p
+                            className="mt-1 sm:mt-1.5 text-xs text-red-600 font-light"
+                            role="alert"
+                        >
+                            {errors.invalidCredentials}
                         </p>
                     )}
                 </div>

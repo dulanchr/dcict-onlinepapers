@@ -2,9 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Navigation from '../../components/landing/Navigation';
+import Navigation from '../../components/common/Navigation';
 import Footer from '../../components/common/Footer';
-import ExamCard from '../../components/exams/ExamCard';
+import ExamCard from '../../components/cards/ExamCard';
 
 export default function Exams() {
   const router = useRouter();

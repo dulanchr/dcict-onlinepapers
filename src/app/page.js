@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Navigation from '../components/landing/Navigation';
-import FeaturesSection from '../components/landing/FeaturesSection';
+import Navigation from '../components/common/Navigation';
+import LandingCard from '../components/cards/LandingCard';
 import Footer from '../components/common/Footer';
 
 export default function Home() {
@@ -60,7 +60,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-8">
-            <FeaturesSection />
+            <LandingCard />
           </div>
         </div>
         

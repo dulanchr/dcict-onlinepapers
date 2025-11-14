@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import GlowHover from '../animations/GlowHover';
+import GlowHover from './animations/GlowHover';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -105,6 +105,7 @@ export default function Navigation() {
           height={150}
           className="block size-half object-cover"
           priority
+          style={{ width: "150px", height: "auto" }}
         />
     </motion.div>
   );

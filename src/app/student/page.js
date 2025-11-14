@@ -267,14 +267,14 @@ export default function StudentDashboard() {
                             <h1 className="text-sm sm:text-base font-medium text-gray-900">Student Dashboard</h1>
                         </div>
                         <Link href="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center sm:hidden">
-                            <img src="/images/logo.svg" alt="Student Portal" className="h-6 w-auto" />
+                            <img src="/images/logo.svg" alt="Student Portal" className="h-6 w-auto" style={{ height: '24px', width: 'auto' }} />
                         </Link>
                         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                             <div className="hidden sm:flex items-center gap-2 sm:gap-3">
-                                <img src="/images/dulanchathuranga.png" alt="Profile" className="h-8 sm:h-10 w-auto rounded-lg" />
-                                <img src="/images/logo.svg" alt="ICTBYDULAN.COM" className="h-6 sm:h-8 w-auto" />
+                                <img src="/images/dulanchathuranga.png" alt="Profile" className="h-8 sm:h-10 w-auto rounded-lg" style={{ height: '40px', width: 'auto' }} />
+                                <img src="/images/logo.svg" alt="ICTBYDULAN.COM" className="h-6 sm:h-8 w-auto" style={{ height: '32px', width: 'auto' }} />
                             </div>
-                            <img src="/images/dulanchathuranga.png" alt="Profile" className="sm:hidden h-8 w-auto rounded-lg" />
+                            <img src="/images/dulanchathuranga.png" alt="Profile" className="sm:hidden h-8 w-auto rounded-lg" style={{ height: '32px', width: 'auto' }} />
                             <motion.button
                                 onClick={handleLogout}
                                 whileHover="hover"

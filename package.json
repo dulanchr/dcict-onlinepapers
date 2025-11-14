@@ -1,22 +1,31 @@
 {
   "name": "dcict-onlinepapers",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "seed": "node scripts/seed.js",
+    "seed:user": "node scripts/seed-user.js",
+    "db:list": "node scripts/list-users.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.4.1",
     "framer-motion": "^12.23.24",
+    "iron-session": "^8.0.4",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/better-sqlite3": "^7.6.13",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4"
